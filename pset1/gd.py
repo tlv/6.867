@@ -1,13 +1,14 @@
 import numpy as np
 ep = 0.000001
 
+
 def gd(f, start, step, cvg):
-  iters = 0
+  iters = 1
   while iters < 100000:
     grad = gradient(f, start)
     nextv = start - step * grad
     if abs(f(start) - f(nextv)) < cvg:
-      return nextv
+      return nextv, iters
     start = nextv
     iters += 1
 
