@@ -3,6 +3,9 @@ ep = 0.000001
 
 
 def gd(f, start, step, cvg):
+  start = start.astype(float)
+  step = step.astype(float)
+  cvg = cvg.astype(float)
   iters = 1
   while iters < 100000:
     grad = gradient(f, start)
