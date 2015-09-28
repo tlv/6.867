@@ -4,8 +4,6 @@ ep = 0.000001
 
 def gd(f, start, step, cvg):
   start = start.astype(float)
-  step = step.astype(float)
-  cvg = cvg.astype(float)
   iters = 1
   while iters < 100000:
     grad = gradient(f, start)
@@ -18,12 +16,13 @@ def gd(f, start, step, cvg):
 
 def gradient(f, start):
   start = start.astype(float)
+  start2 = np.copy(start)
   n = start.shape[0]
   plus = np.identity(n) * ep
   minus = np.identity(n) * (-ep)
   startd1 = np.tile(start, (n, 1))
   startd1 += plus
-  startd2 = np.tile(start, (n, 1))
+  startd2 = np.tile(start2, (n, 1))
   startd2 += minus
   plusv = np.array([f(startd1[i,:]) for i in range(n)])
   minusv = np.array([f(startd2[i,:]) for i in range(n)])
