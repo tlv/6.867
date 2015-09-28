@@ -1,8 +1,16 @@
 import numpy as np
 ep = 0.000001
 
-def gd(f, start, step):
-  pass
+def gd(f, start, step, cvg):
+  iters = 0
+  while iters < 100000:
+    grad = gradient(f, start)
+    nextv = start - step * grad
+    if abs(f(start) - f(nextv)) < cvg:
+      return nextv
+    start = nextv
+    iters += 1
+
 
 def gradient(f, start):
   start = start.astype(float)
