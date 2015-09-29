@@ -1,5 +1,6 @@
 import numpy as np
-ep = 0.000001
+import copy
+ep = 0.1
 
 
 def gd(f, start, step, cvg):
@@ -12,7 +13,6 @@ def gd(f, start, step, cvg):
       return nextv, iters
     start = nextv
     iters += 1
-
 
 def gradient(f, start):
   start = start.astype(float)
@@ -27,3 +27,8 @@ def gradient(f, start):
   plusv = np.array([f(startd1[i,:]) for i in range(n)])
   minusv = np.array([f(startd2[i,:]) for i in range(n)])
   return 1/(2*ep) * (plusv - minusv)
+
+def square(x):
+  return (x - 3) ** 2
+
+print gd(square, np.array([0]), 0.2, 0.00000001)
