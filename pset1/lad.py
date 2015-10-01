@@ -1,7 +1,6 @@
 import numpy as np
 import gd
 import lbfr
-import parker_rr as rr
 from hw1_res import homework1
 
 
@@ -29,7 +28,13 @@ X_test = data_test[0].reshape(data_test[0].size)
 Y_test = data_test[1].reshape(data_test[1].size)
 
 mins = {}
+asdf = 0
 for M in range(10):
   for lam in [2 ** x for x in np.arange(-3, 6, 0.5)]:
     f = obj_func(lbfr.compute_Phi_poly(X_train, M), Y_train, lam)
-    
+    res = gd.gd(f, np.zeros(M+1), 0.001, 0.001, max_iters = 10000)
+    Theta = res[0]
+    mins[(M,lam)] = f(Theta)
+    asdf += 1
+    print asdf
+print mins

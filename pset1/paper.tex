@@ -1,0 +1,16 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\title{6.867 Problem Set 1}
+\date{October 1, 2015}
+
+\begin{document}
+\maketitle
+\section{Gradient Descent}
+Gradient descent is a very popular numerical algorithm for finding the minimum value of a function. The algorithm works by starting witha guessed input value, and iterates towards the minimum. At each step, the algorithm computes the gradient at its input value, and shifts its guessed input along the direction opposite the gradient. When the difference between evaluations of the function at two consecutive input values falls below some convergence criterion, the algorithm stops, and the last input value is returned as the location of the minimum.
+
+\subsection{Implementation}
+We implemented gradient descent in 25 lines of Python, using the numpy library. 
+\end{document}
