@@ -1,5 +1,6 @@
 import numpy as np
 from hw1_res import homework1
+import pylab
 import gd
 
 
@@ -42,7 +43,9 @@ for M in [0,1,3,9]:
   Theta = max_likely(X,Y,M)
   Theta2 = np.zeros(Theta.size)
   Phi = compute_Phi_poly(X,M)
+
   print "-----------------"
+  print Theta
   print sse(Theta, Phi, Y)
   print sse_der(Theta2, Phi, Y)
   print sse_der_2(Theta2, Phi, Y)

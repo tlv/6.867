@@ -30,4 +30,14 @@ We compared our implementation of gradient descent with a more sophisticated alg
 
 We found that \begin{tt}fmin\_bfgs\end{tt} usually required equal or more function evaluations, but fewer gradient evaluations, than unmodified gradient descent when minimizing $f_1$, while achieving similar accuracy. For example, with starting guess $(10^5, -10^5)$, gradient descent performed 20 function calls and 20 gradient calls, whereas \begin{tt}fmin\_bfgs\end{tt} performed 28 function calls and 7 gradient calls. The same held true for $f_2$ when the starting guess roughly satisfied $x_1, x_2 \ge 3$ and $\max (x_1, x_2) \le 1.1\min (x_1, x_2)$. However, when this was not true, unmodified gradient descent required many more steps than \begin{tt}fmin\_bfgs\end{tt}: unmodified gradient descent would usually terminate after performing 150-200 function and gradient calls, whereas \begin{tt}fmin\_bfgs\end{tt} would typically perform 30-50 function calls and 10-15 gradient calls (we were unable to determine the cause of this behavior). The two algorithms also sometimes ended up at different minima; for example, when starting from $(x_1, x_2) = (-10, -10)$, gradient descent terminated at the global minimum, while \begin{tt}fmin\_bfgs\end{tt} terminated at the other local minimum.
 
+\section{Linear Basis Function Regression}
+Given a feature matrix $\Phi$, a weight vector $\theta$, and an output vector $Y$, we define the sum-of-squares error (SSE) of $\theta$ as
+$$(\Phi\theta - Y)^T(\Phi\theta - Y).$$
+The particular vector $\theta$ that minimizes this value is
+$$\theta = (\Phi^T\Phi)^{-1}\Phi^TY.$$
+The gradient of the sum-of-squares error with respect to $\theta$ is
+$$2\Phi^T(\Phi\theta - Y).$$
+We implemented functions to calculate, using the closed forms given above, both the SSE-minimizing value (i.e. the value with the maximum likelihood) of $\theta$ as well as the gradient of the SSE with respect to $\theta$. We verified the correctness of the maximum-likelihood function by checking it against data sets for which the maximum likelihood vectors were known. We also verified the correctness of the gradient by checking it against a numerical implementation.
+
+
 \end{document}
