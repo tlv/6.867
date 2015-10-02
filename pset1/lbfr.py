@@ -38,7 +38,7 @@ def sse_der_2(Theta, Phi, Y):
   f = lambda x: sse(x, Phi, Y)
   return gd.gradient(f, Theta)
 
-
+"""
 data = homework1.getData('curvefitting.txt')
 X = data[0].reshape(data[0].size)
 Y = data[1].reshape(data[1].size)
@@ -63,4 +63,4 @@ for M in [3]:
     pylab.plot(Xlin, Ylin_sin, 'g')
     pylab.plot(Xlin, Ylin_poly_2, 'b')
 pylab.show()
-
+"""

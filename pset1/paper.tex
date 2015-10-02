@@ -42,18 +42,34 @@ We implemented functions to calculate, using the closed forms given above, both 
 \subsection{Minimizing SSE with gradient descent}
 We attempted to find maximum-likelihood values of $\theta$ using unmodified gradient descent and \begin{tt}fmin\_bfgs\end{tt}. Unmodified gradient descent ended up performing very poorly on this problem; with $M=3$ and a convergence criteria of $10^{-8}$, 100,000 iterations (each iteration including one function call and one gradient call) were not enough for the algorithm to converge with a step size of 0.01. The best-performing step size we found was 0.06, which converged in 49,003 iterations. Larger step sizes (as small as 0.065) ended up diverging and giving us no useful results. Reducing the convergence criteria to $10^{-5}$ (at which point there was a visible discrepancy between the maximum-likelihood polynomials produced by the closed-form formula and that produced by gradient descent) did not impact performance significantly; with a step size of 0.06, the algorithm still required approximately 30,000 iterations to converge. Adjusting the starting guess did not significantly affect the performance of the algorithm.
 
-\begin{tt}fmin\_bfgs\end{tt} performed much better on this problem. The algorithm required onnly 162 function calls and 27 gradient calls (again, with the $M=3$ case) to converge to a solution (which was visually indistinguishable from the optimal solution found by the closed-form formula). Plots depicting our results can be found in Figure 1.
+\begin{tt}fmin\_bfgs\end{tt} performed much better on this problem. The algorithm required onnly 162 function calls and 27 gradient calls (again, with the $M=3$ case) to converge to a solution (which was visually indistinguishable from the optimal solution found by the closed-form formula). Plots depicting our results can be found in Figure \ref{p2figure1}.
 
 \begin{figure}
+\label{p2figure1}
 \includegraphics[scale=0.4]{figure2_1.png}
 \includegraphics[scale=0.4]{figure2_2.png}
 \caption{The maximum-likelihood polynomials ($M=3$) produced by gradient descent. The sin function used to generate the data is in green, the polynomial produced by the closed-form formula in red, and the polynomial produced by gradient descent in blue. Note that in the left figure, the red curve is almost invisible, as it is mostly covered by the blue curve. The figure on the left corresponds to a convergence criterion of $10^{-8}$, while the one on the right corresponds to a convergence criterion of $10^{-5}$. The \texttt{fmin\_bfgs} function produced a figure similar to the one on the left.}
 \end{figure}
 
-Because the data set that we used was generated using an underlying sin function, we investigated the behavior of the algorithm when trigonometric functions were used to generate $\Phi$. We initially expected that the algorithm would generate a fit that was closer to the original sin function, but it actually did not. The result of this can be seen in Figure 2. Attempting to fit data in this way without knowing how it was generated also carries some disadvantages. Any function that we generate with trigonometric basis functions must necessarily be periodic with period 1, so the fit may not generalize well to values of $x$ outside the interval supplied. Furthermore, trigonometric functions will have a difficult time characterizing simple relationships, such as linear correlations.
+Because the data set that we used was generated using an underlying sin function, we investigated the behavior of the algorithm when trigonometric functions were used to generate $\Phi$. We initially expected that the algorithm would generate a fit that was closer to the original sin function, but it actually did not. The result of this can be seen in Figure \ref{p2figure2}. Attempting to fit data in this way without knowing how it was generated also carries some disadvantages. Any function that we generate with trigonometric basis functions must necessarily be periodic with period 1, so the fit may not generalize well to values of $x$ outside the interval supplied. Furthermore, trigonometric functions will have a difficult time characterizing simple relationships, such as linear correlations.
 
 \begin{figure}
+\label{p2figure2}
 \includegraphics[scale=0.4]{figure2_3.png}
 \caption{The maximum-likelihood function produced using trigonometric basis functions ($M=3$). This function (blue) does not actually appear to be more faithful to the original sin function (green) than the maximum-likelihood degree-3 polynomial (red).}
 \end{figure}
+
+\section{Least Absolute Deviation}
+Alternatively to minimizing the SSE in a regression problem, we can instead try to minimize the sum of the absolute errors, which is a method called Least Absolute Deviation (i.e. LAD). In this section we investigate the behavior of this method of optimization.
+
+We repeated our experiment from section 3 in this section, fitting weight vectors for values of $M$ between 0 and 9 (inclusive), and values of $\lambda$ of the form $2^{k/2}$ for integers $-3 \le k \le 11$. We found the cross-validation error for each weight vector, and discovered that $(M, \lambda) = (2, 2^{-3})$ resulted in the lowest cross-validation error, while $(M, \lambda) = (6, 2^{-1})$ resulted in the highest. However, the best and worst CV errors differed by only one order of magnitude, which surprised us. We believe this is due to an affinity towards median behavior of this method, as the value with the least absolute error with respect to a set of values is the median of that set. The best and worst fits are depicted in Figure \ref{p4figure}.
+
+\begin{figure}
+\label{p4figure}
+\includegraphics[scale=0.4]{figure4_3.png}
+\includegraphics[scale=0.4]{figure4_4.png}
+\caption{The fits with the lowest (left) and highest (right) cross-validation errors. The left fit used the values $M=2, \lambda = 2^{-3}$, while the right fit used the values $M=6, \lambda = 2^{-1}$. The fitted polynomial is shown in red, with the training set, cross-validation set, and test set shown in blue, red, and green, respectively.}
+\end{figure}
+
+Upon looking at all of the generated data, it appeared that the value of $\lambda$ had little consequence on the cross-validation error, and that there was at best a slight positive relationship between the value of $M$ and the cross-validation error. It thus seems that using ridge regression has little consequence when using LAD. Ridge regression seems more suitable in situations where overfitting may be a problem, and because LAD demonstrates affinity for median-like behavior, it is unlikely to overfit. We believe that LAD is a suitable method to use when other methods, such as ridge regression, are insufficient for solving the overfitting problem, or when finding optimal values of $M$ and $\lambda$ is impractical (many values to try, large datasets that take a long time to fit, etc.).
 \end{document}
